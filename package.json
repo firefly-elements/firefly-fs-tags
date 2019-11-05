@@ -1,5 +1,5 @@
 {
-  "name": "firefly-fs-tags",
+  "name": "@firefly-elements/firefly-fs-tags",
   "description": "This component displays a list of tags. An autocomplete component gives the user",
   "main": "firefly-fs-tags.js",
   "dependencies": {
@@ -14,5 +14,26 @@
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "wct-mocha": "^1.0.1"
-  }
+  },
+  "version": "0.5.0",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firefly-elements/firefly-fs-tags.git"
+  },
+  "keywords": [
+    "firefly",
+    "firefly-tags"
+  ],
+  "author": "Ishan Subedi,Mark Fortner,Suyash Adhikary",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/firefly-elements/firefly-fs-tags/issues"
+  },
+  "homepage": "https://github.com/firefly-elements/firefly-fs-tags#readme"
 }

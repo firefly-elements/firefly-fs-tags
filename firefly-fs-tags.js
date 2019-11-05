@@ -37,6 +37,7 @@ class FireflyTags extends PolymerElement {
         app-name="[[appName]]"
         path="[[suggestedValuesPath]]"
         order-by-value=""
+        data="{{data}}"
         start-at="[[start]]"
         on-data-changed="__handleDataChanged"
         limit-to-first="5"
@@ -125,7 +126,27 @@ class FireflyTags extends PolymerElement {
         value: ""
       },
 
+      /** This is the tags data from the db. */
+      data: {
+        type: Object,
+        value: ""
+      },
+
+      __deleted: {
+        type: Boolean,
+        value: false
+      },
+
       selectedValuesNodePath: {
+        type: String,
+        value: ""
+      },
+
+      navigate: {
+        type: Boolean,
+        value: false
+      },
+      navigateTo: {
         type: String,
         value: ""
       }
@@ -134,9 +155,10 @@ class FireflyTags extends PolymerElement {
 
   __handleDataChanged(e) {
     let data = e.detail.value;
+
     let suggestions = [];
     for (let item of data) {
-      suggestions.push({ text: item[this.key], value: item.companyName });
+      suggestions.push({ text: item[this.key], value: item.$key });
     }
     this.set("__suggestions", suggestions);
   }
@@ -156,6 +178,22 @@ class FireflyTags extends PolymerElement {
     return true;
   }
 
+  __launch(e) {
+    if (!this.__deleted && this.navigate) {
+      const chipTray = this.shadowRoot.querySelector(
+        "paper-chip-input-autocomplete"
+      );
+
+      const navigationTo = this.navigateTo;
+      try {
+        const key = this.data.find(elem => elem.name === e.detail.tag).$key;
+        window.open(`/${navigationTo}/${key}`, "_blank");
+      } catch (e) {
+        window.open(`/${navigationTo}`, "_blank");
+      }
+    }
+    this.set("__deleted", false);
+  }
   /**
    * Instance of the element is created/upgraded. Use: initializing state,
    * set up event listeners, create shadow dom.
@@ -216,6 +254,7 @@ class FireflyTags extends PolymerElement {
    * @param {Event} e the event object
    */
   __handleChipDeleted(e) {
+    this.set("__deleted", true);
     let path = this.selectedValuesPath;
     e.stopPropagation();
     this.dispatchEvent(
@@ -243,6 +282,7 @@ class FireflyTags extends PolymerElement {
     );
     chipTray.addEventListener("chip-created", e => this.__handleChipCreated(e));
     chipTray.addEventListener("chip-removed", e => this.__handleChipDeleted(e));
+    chipTray.addEventListener("tag-clicked", e => this.__launch(e));
   }
 
   /**
@@ -261,6 +301,7 @@ class FireflyTags extends PolymerElement {
     chipTray.removeEventListener("chip-removed", e =>
       this.__handleChipDeleted(e)
     );
+    chipTray.removeEventListener("tag-clicked", e => this.__launch(e.tag));
   }
 }
 
