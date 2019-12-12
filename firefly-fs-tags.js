@@ -158,7 +158,9 @@ class FireflyTags extends PolymerElement {
 
     let suggestions = [];
     for (let item of data) {
-      suggestions.push({ text: item[this.key], value: item.$key });
+      if (item[this.key] !== undefined) {
+        suggestions.push({ text: item[this.key], value: item.$key });
+      }
     }
     this.set("__suggestions", suggestions);
   }
